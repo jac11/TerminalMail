@@ -141,7 +141,7 @@ class Send_Mail():
                                           
       def control(self):
     
-        parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments] [OPtion] [arguments]  Example: ./webshop.py --URL https://www.site.com/ -o outbut ")
+        parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments] [OPtion] [argument] ")
         parser.add_argument("-S","--sender"         , metavar='' , action=None  ,required = True  ,help = "sendder email account") 
         parser.add_argument("-R","--receive"        , metavar='' , action=None  ,required = True  ,help = "receive email acconut ") 
         parser.add_argument("-M","--smtp"           , metavar='' , action=None  ,required = True  ,help = "SMTP server sender email ") 
