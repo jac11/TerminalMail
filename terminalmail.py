@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart    
 from email.mime.base import MIMEBase
 from email import encoders
-import imghdr 
+import deprecated
 import time 
 import os 
 import argparse
@@ -39,6 +39,7 @@ class Send_Mail():
            self.mes["subject"] = self.subject
           
       def attached_file(self):
+
            try:
               try:
                  if self.args.attach :
@@ -142,14 +143,14 @@ class Send_Mail():
       def control(self):
     
         parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments] [OPtion] [argument] ")
-        parser.add_argument("-S","--sender"         , metavar='' , action=None  ,required = True  ,help = "sendder email account") 
-        parser.add_argument("-R","--receive"        , metavar='' , action=None  ,required = True  ,help = "receive email acconut ") 
-        parser.add_argument("-M","--smtp"           , metavar='' , action=None  ,required = True  ,help = "SMTP server sender email ") 
-        parser.add_argument("-U","--user"           , metavar='' , action=None  ,required = True  ,help = "user name in SMTP server ") 
-        parser.add_argument("-A","--authentication" , metavar='' , action=None  ,required = True  ,help = "password or api key for user smtp ") 
-        parser.add_argument("-s","--subject"        , metavar='' , action=None  ,required = True  ,help = "email subject  ")
-        parser.add_argument("-m","--massage"        , metavar='' , action=None                    ,help = "email massage  ")
-        parser.add_argument("-a","--attach"         , metavar='' , action=None                    ,help = "attach file txt,image..etc")
+        parser.add_argument("-S","--sender"         ,required=True , action=None  ,help = "sendder email account") 
+        parser.add_argument("-R","--receive"        ,required=True , action=None  ,help = "receive email acconut ") 
+        parser.add_argument("-M","--smtp"           ,required=True, action=None  ,help = "SMTP server sender email ") 
+        parser.add_argument("-U","--user"           ,required=True, action=None  ,help = "user name in SMTP server ") 
+        parser.add_argument("-A","--authentication" ,required=True, action=None  ,help = "password or api key for user smtp ") 
+        parser.add_argument("-s","--subject"        ,required=True, action=None  ,help = "email subject  ")
+        parser.add_argument("-m","--massage"        ,action=None  ,help = "email massage  ")
+        parser.add_argument("-a","--attach"         ,action=None  ,help = "attach file txt,image..etc")
         
         self.args = parser.parse_args()
         if len(sys.argv)!=1 :
@@ -191,9 +192,7 @@ class Send_Mail():
           print('[+] Subject                 : '           ,self.args.subject )
           time.sleep(0.45)
           print('[+] Massage                 : '           ,self.args.massage )
-          time.sleep(0.45)
-          
-                  
+          time.sleep(0.45)         
       def main(self):
           self.print_info()
           self.Messags_heder()
