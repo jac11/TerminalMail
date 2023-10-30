@@ -18,8 +18,6 @@ class Send_Mail():
          
          
       def __init__(self): 
-            global R   
-            global W 
             self.banner ="""     
   ______                                 _ ,__ __          _  
  (_) |                   o              | /|  |  |      o | | 
