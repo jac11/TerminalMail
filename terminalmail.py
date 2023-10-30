@@ -45,7 +45,7 @@ class Send_Mail():
                  if self.args.attach :
                     self.path_attach = os.path.abspath(self.attach) 
                     self.attach_name =  os.path.basename( self.path_attach)   
-                    print('[+] Attach File             : '       , self.attach_name )
+                    print('📌️ Attach File             : '       , self.attach_name )
                     file_atta = open(self.path_attach ,'rb')    
                     get = MIMEBase("application","octet-stream")
                     get.set_payload((file_atta).read())
@@ -72,7 +72,7 @@ class Send_Mail():
                           server.login(self.user_SMTP,self.auth)                                               
                           server.sendmail(self.sendder, self.Receive ,self.message)
                           server.quit()
-                          print (R+"[*] Email Status            :  Delivered "+W )
+                          print (R+"📬️ Email Status            :  Delivered "+W )
                       except Exception:
                              try : 
                                 
@@ -81,7 +81,7 @@ class Send_Mail():
                                  server.login(self.user_SMTP,self.auth)                                               
                                  server.sendmail(self.sendder, self.Receive ,self.message)
                                  server.quit()
-                                 print (R+"[*] Email Status            :  Delivered "+W )
+                                 print (R+"📬️ Email Status            :  Delivered "+W )
                                  exit()
                              except Exception:
                                     try : 
@@ -91,10 +91,10 @@ class Send_Mail():
                                         server.login(self.user_SMTP,self.auth)                                               
                                         server.sendmail(self.sendder, self.Receive ,self.message)
                                         server.quit()
-                                        print (R+"[*] Email Status           :  Delivered "+W )
+                                        print (R+"📬️ Email Status           :  Delivered "+W )
                                         exit()  
                                     except Exception as e :
-                                         print (R+"[*] Email Status            : " ,e)
+                                         print (R+"📭️ Email Delivery Failure  : " ,e)
                                          
                else:
                
@@ -107,7 +107,7 @@ class Send_Mail():
                        self.mes=self.mes.as_string()
                        server.sendmail(self.sendder, self.Receive,self.mes)
                        server.quit()  
-                       print (R+"[*] Email Status            :  Delivered "+W)
+                       print (R+"📬️ Email Status            :  Delivered "+W)
                        exit()
                    except Exception : 
                         try :
@@ -119,7 +119,7 @@ class Send_Mail():
                             self.mes=self.mes.as_string()
                             server.sendmail(self.sendder, self.Receive,self.mes)
                             server.quit()  
-                            print (R+"[*] Email Status            :  Delivered "+W)
+                            print (R+"📬️ Email Status            :  Delivered "+W)
                             exit()
                         except Exception :
                                 try :
@@ -131,10 +131,10 @@ class Send_Mail():
                                     self.mes=self.mes.as_string()
                                     server.sendmail(self.sendder, self.Receive,self.mes)
                                     server.quit()  
-                                    print (R+"[*] Email Status            :  Delivered "+W)
+                                    print (R+"📬️ Email Status            :  Delivered "+W)
                                     exit()
                                 except Exception as e:
-                                       print (R+"[*] Email Status             : " ,e)
+                                       print (R+"📭️ Email Delivery Failure  : " ,e)
                                          
            except KeyboardInterrupt:
                   print(self.banner)
@@ -148,8 +148,6 @@ class Send_Mail():
         parser.add_argument("-M","--smtp"           ,required=True, action=None  ,help = "SMTP server sender email ") 
         parser.add_argument("-U","--user"           ,required=True, action=None  ,help = "user name in SMTP server ") 
         parser.add_argument("-A","--authentication" ,required=True, action=None  ,help = "password or api key for user smtp ") 
-        parser.add_argument("-s","--subject"        ,required=True, action=None  ,help = "email subject  ")
-        parser.add_argument("-m","--massage"        ,action=None  ,help = "email massage  ")
         parser.add_argument("-a","--attach"         ,action=None  ,help = "attach file txt,image..etc")
         
         self.args = parser.parse_args()
@@ -164,13 +162,11 @@ class Send_Mail():
                  self.user_SMTP = self.args.user
               if self.args.authentication :
                  self.auth = self.args.authentication
-              if self.args.subject:
-                 self.subject = self.args.subject
-              if self.args.massage :
-                 self.body=  self.args.massage
               if self.args.attach:
-                 self.attach= self.args.attach   
-                                 
+                 self.attach = self.args.attach   
+              self.subject   = str(input("📧️ Enter Email Subject : "))
+              self.body      = str(input("📝️ Enter Email Message : "))     
+              print('='*30)               
         else:
              print(self.banner)          
              parser.print_help()
@@ -179,19 +175,19 @@ class Send_Mail():
       def print_info(self):   
           time.sleep(0.45)
           print()     
-          print('[+] From                    : '              ,self.args.sender )
+          print('🪧️ From                    : '              ,self.args.sender )
           time.sleep(0.45)
-          print('[+] To                      : '              ,self.args.receive )
+          print('🪪️ To                      : '              ,self.args.receive )
           time.sleep(0.45)
-          print('[+] SMTP Mail Server        : '  ,self.args.smtp )
+          print('🖥️  SMTP Mail Server        : '  ,self.args.smtp )
           time.sleep(0.45)
-          print('[+] SMTP Mail User          : '  ,self.args.user )
+          print('👤️ SMTP Mail User          : '  ,self.args.user )
           time.sleep(0.45)
-          print('[+] SMTP authentication     : ',self.args.authentication )
+          print('🔏️ SMTP authentication     : ',self.args.authentication )
           time.sleep(0.45)
-          print('[+] Subject                 : '           ,self.args.subject )
+          print('📰️ Subject                 : '           ,self.subject  )
           time.sleep(0.45)
-          print('[+] Massage                 : '           ,self.args.massage )
+          print('🧾️ Massage                 : '           ,self.body )
           time.sleep(0.45)         
       def main(self):
           self.print_info()
