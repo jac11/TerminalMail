@@ -18,8 +18,7 @@ class Send_Mail():
          
          
       def __init__(self): 
-            global R   
-            global W 
+
             self.banner ="""     
   ______                                 _ ,__ __          _  
  (_) |                   o              | /|  |  |      o | | 
@@ -76,7 +75,6 @@ class Send_Mail():
                           print (R+"📬️ Email Status            :  Delivered "+W )
                       except Exception:
                              try : 
-                                
                                  server = smtplib.SMTP(self.smtp_machine,587,timeout=3)
                                  server.starttls()
                                  server.login(self.user_SMTP,self.auth)                                               
@@ -144,15 +142,36 @@ class Send_Mail():
       def control(self):
     
         parser = argparse.ArgumentParser( description="Usage: [OPtion] [arguments] [OPtion] [argument] ")
-        parser.add_argument("-S","--sender"         ,required=True , action=None  ,help = "sendder email account") 
-        parser.add_argument("-R","--receive"        ,required=True , action=None  ,help = "receive email acconut ") 
-        parser.add_argument("-M","--smtp"           ,required=True, action=None  ,help = "SMTP server sender email ") 
-        parser.add_argument("-U","--user"           ,required=True, action=None  ,help = "user name in SMTP server ") 
-        parser.add_argument("-A","--authentication" ,required=True, action=None  ,help = "password or api key for user smtp ") 
-        parser.add_argument("-a","--attach"         ,action=None  ,help = "attach file txt,image..etc")
-        
+        parser.add_argument("-S","--sender"         , action=None  ,help = "sendder email account") 
+        parser.add_argument("-R","--receive"        , action=None  ,help = "receive email acconut ") 
+        parser.add_argument("-M","--smtp"           , action=None  ,help = "SMTP server sender email ") 
+        parser.add_argument("-U","--user"           , action=None  ,help = "user name in SMTP server ") 
+        parser.add_argument("-A","--authentication" , action=None  ,help = "password or api key for user smtp ") 
+        parser.add_argument("-a","--attach"         ,action=None   ,help = "attach file txt,image..etc")
+        parser.add_argument("-p","--post"           ,action=None   ,help = "read Message body form file")
+        parser.add_argument("-C","--config"         ,action=None   ,help = "read Configroution for file")
         self.args = parser.parse_args()
         if len(sys.argv)!=1 :
+          if self.args.config:
+                  with open(self.args.config,'r') as Config:
+                      Config        = Config.readlines()
+                  self.sendder       = str(Config[0]).replace('\n','').strip()
+                  self.Receive       = str(Config[1]).replace('\n','').strip()
+                  self.smtp_machine  = str(Config[2]).replace('\n','').strip()
+                  self.user_SMTP     = str(Config[3]).replace('\n','').strip()
+                  self.auth          = str(Config[4]).replace('\n','').strip()
+                  self.subject   = str(input("📧️ Enter Email Subject : "))
+                  if self.args.attach:
+                      self.attach = self.args.attach    
+                  if self.args.post:
+                      with open(self.args.post,'r') as postmes:
+                          self.body = postmes.read()
+                          self.path_Mes = os.path.abspath(self.args.post) 
+                          self.mes_name =  os.path.basename( self.path_Mes)       
+                  else:         
+                      self.body = str(input("📝️ Enter Email Message : "))  
+                  print('='*30)       
+          else:
               if self.args.sender:
                  self.sendder = self.args.sender
               if self.args.receive:   
@@ -166,7 +185,13 @@ class Send_Mail():
               if self.args.attach:
                  self.attach = self.args.attach   
               self.subject   = str(input("📧️ Enter Email Subject : "))
-              self.body      = str(input("📝️ Enter Email Message : "))     
+              if self.args.post:
+                   with open(self.args.post,'r') as postmes:
+                       self.body = postmes.read()
+                   self.path_Mes = os.path.abspath(self.args.post) 
+                   self.mes_name =  os.path.basename( self.path_Mes)       
+              else:         
+                  self.body      = str(input("📝️ Enter Email Message : "))     
               print('='*30)               
         else:
              print(self.banner)          
@@ -176,20 +201,24 @@ class Send_Mail():
       def print_info(self):   
           time.sleep(0.45)
           print()     
-          print('🪧️ From                    : '              ,self.args.sender )
+          print('🪧️ From                    : '              ,self.sendder)
           time.sleep(0.45)
-          print('🪪️ To                      : '              ,self.args.receive )
+          print('🪪️ To                      : '              ,self.Receive )
           time.sleep(0.45)
-          print('🖥️  SMTP Mail Server        : '  ,self.args.smtp )
+          print('🖥️  SMTP Mail Server        : '  ,self.smtp_machine  )
           time.sleep(0.45)
-          print('👤️ SMTP Mail User          : '  ,self.args.user )
+          print('👤️ SMTP Mail User          : '  ,self.user_SMTP )
           time.sleep(0.45)
-          print('🔏️ SMTP authentication     : ',self.args.authentication )
+          print('🔏️ SMTP authentication     : ',self.auth)
           time.sleep(0.45)
           print('📰️ Subject                 : '           ,self.subject  )
           time.sleep(0.45)
-          print('🧾️ Massage                 : '           ,self.body )
-          time.sleep(0.45)         
+          if self.args.post:
+               print('🧾️ Message File            : '           ,self.mes_name )
+               time.sleep(0.45)  
+          else:       
+              print('🧾️ Message                 : '           ,self.body )
+              time.sleep(0.45)         
       def main(self):
           self.print_info()
           self.Messags_heder()
