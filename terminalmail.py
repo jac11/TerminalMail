@@ -18,6 +18,8 @@ class Send_Mail():
          
          
       def __init__(self): 
+            global R   
+            global W 
             self.banner ="""     
   ______                                 _ ,__ __          _  
  (_) |                   o              | /|  |  |      o | | 
@@ -35,12 +37,13 @@ class Send_Mail():
            self.mes["From"]= self.sendder
            self.mes["To"]= self.Receive
            self.mes["subject"] = self.subject
-          
+           
       def attached_file(self):
 
            try:
               try:
                  if self.args.attach :
+                    self.mes.attach(MIMEText(self.body,"plain"))
                     self.path_attach = os.path.abspath(self.attach) 
                     self.attach_name =  os.path.basename( self.path_attach)   
                     print('📌️ Attach File             : '       , self.attach_name )
