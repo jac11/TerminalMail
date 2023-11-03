@@ -103,6 +103,7 @@ class Send_Mail():
                        server.starttls()
                        server.login(self.user_SMTP,self.auth)
                        if self.args.html and self.args.format:
+                          self.mes.attach(MIMEText(self.body,"plain"))
                           with open('HTML.HTML','r') as readHTML :
                                html = readHTML.read()
                           self.mes.attach(MIMEText(html,"html"))
@@ -120,6 +121,7 @@ class Send_Mail():
                             server.starttls()
                             server.login(self.user_SMTP,self.auth)
                             if self.args.html and self.args.format:
+                                self.mes.attach(MIMEText(self.body,"plain"))
                                 with open('HTML.HTML','r') as readHTML :
                                     html = readHTML.read()
                                 self.mes.attach(MIMEText(html,"html"))
@@ -137,6 +139,7 @@ class Send_Mail():
                                     server.starttls()
                                     server.login(self.user_SMTP,self.auth)
                                     if self.args.html and self.args.format:
+                                       self.mes.attach(MIMEText(self.body,"plain"))
                                        with open('HTML.HTML','r') as readHTML :
                                            html = readHTML.read()
                                        self.mes.attach(MIMEText(html,"html"))
@@ -233,7 +236,7 @@ class Send_Mail():
                    self.path_Mes = os.path.abspath(self.args.post) 
                    self.mes_name =  os.path.basename( self.path_Mes)     
                 elif self.args.html:
-                    pass     
+                    self.body      = str(input("📝️ Enter Email Message : "))  
                 else:         
                     self.body      = str(input("📝️ Enter Email Message : "))     
                 print('='*30)               
@@ -261,6 +264,7 @@ class Send_Mail():
                print('🧾️ Message File       : ',self.mes_name.strip())
                time.sleep(0.45)  
             elif self.args.html:
+                 print('🧾️ Message                 : ',self.body.strip())
                  print('💼️ Email Type              :  HTML Format')  
             else:       
                  print('🧾️ Message              : ',self.body.strip())
@@ -273,3 +277,4 @@ class Send_Mail():
                                                                               
 if __name__=='__main__':
      Send_Mail()
+
