@@ -19,14 +19,14 @@ class Send_Mail():
          
       def __init__(self): 
 
-            self.banner ="""     
+            self.banner =R+"""     
   ______                                 _ ,__ __          _  
  (_) |                   o              | /|  |  |      o | | 
      |_   ,_    _  _  _      _  _   __, | ||  |  |  __,   | | 
    _ |/  /  |  / |/ |/ | |  / |/ | /  | |/ |  |  | /  | | |/  
   (_/|__/   |_/  |  |  |_|_/  |  |_\_/|_|__|  |  |_\_/|_|_|__/
                           \____/               by:jacstory     
-                                                           """
+                                                           """+W
             print(self.banner)
             self.control()
             self.main() 
@@ -102,7 +102,12 @@ class Send_Mail():
                        server = smtplib.SMTP(self.smtp_machine,25,timeout=3)
                        server.starttls()
                        server.login(self.user_SMTP,self.auth)
-                       self.mes.attach(MIMEText(self.body,"plain"))
+                       if self.args.html and self.args.format:
+                          with open('HTML.HTML','r') as readHTML :
+                               html = readHTML.read()
+                          self.mes.attach(MIMEText(html,"html"))
+                       else:   
+                          self.mes.attach(MIMEText(self.body,"plain"))
                        self.mes=self.mes.as_string()
                        server.sendmail(self.sendder, self.Receive,self.mes)
                        server.quit()  
@@ -114,7 +119,12 @@ class Send_Mail():
                             server = smtplib.SMTP(self.smtp_machine,587,timeout=3)
                             server.starttls()
                             server.login(self.user_SMTP,self.auth)
-                            self.mes.attach(MIMEText(self.body,"plain"))
+                            if self.args.html and self.args.format:
+                                with open('HTML.HTML','r') as readHTML :
+                                    html = readHTML.read()
+                                self.mes.attach(MIMEText(html,"html"))
+                            else:   
+                                self.mes.attach(MIMEText(self.body,"plain"))
                             self.mes=self.mes.as_string()
                             server.sendmail(self.sendder, self.Receive,self.mes)
                             server.quit()  
@@ -126,7 +136,12 @@ class Send_Mail():
                                     server = smtplib.SMTP(self.smtp_machine,465,timeout=3)
                                     server.starttls()
                                     server.login(self.user_SMTP,self.auth)
-                                    self.mes.attach(MIMEText(self.body,"plain"))
+                                    if self.args.html and self.args.format:
+                                       with open('HTML.HTML','r') as readHTML :
+                                           html = readHTML.read()
+                                       self.mes.attach(MIMEText(html,"html"))
+                                    else:   
+                                        self.mes.attach(MIMEText(self.body,"plain"))
                                     self.mes=self.mes.as_string()
                                     server.sendmail(self.sendder, self.Receive,self.mes)
                                     server.quit()  
@@ -150,17 +165,19 @@ class Send_Mail():
         parser.add_argument("-a","--attach"         ,action=None   ,help = "attach file txt,image..etc")
         parser.add_argument("-p","--post"           ,action=None   ,help = "read Message body form file")
         parser.add_argument("-C","--config"         ,action=None   ,help = "read Configroution for file")
+        parser.add_argument("--html"                ,action='store_true'   ,help = "send Html mail Format")
+        parser.add_argument("-F","--format"         ,action=None    ,help = "path of the html page ")
         self.args = parser.parse_args()
         if len(sys.argv)!=1 :
           if self.args.config:
                   with open(self.args.config,'r') as Config:
-                      Config        = Config.readlines()
+                      Config         = Config.readlines()
                   self.sendder       = str(Config[0]).replace('\n','').strip()
                   self.Receive       = str(Config[1]).replace('\n','').strip()
                   self.smtp_machine  = str(Config[2]).replace('\n','').strip()
                   self.user_SMTP     = str(Config[3]).replace('\n','').strip()
                   self.auth          = str(Config[4]).replace('\n','').strip()
-                  self.subject   = str(input("📧️ Enter Email Subject : "))
+                  self.subject       = str(input("📧️ Enter Email Subject : "))
                   if self.args.attach:
                       self.attach = self.args.attach    
                   if self.args.post:
@@ -172,53 +189,82 @@ class Send_Mail():
                       self.body = str(input("📝️ Enter Email Message : "))  
                   print('='*30)       
           else:
-              if self.args.sender:
-                 self.sendder = self.args.sender
-              if self.args.receive:   
-                 self.Receive = self.args.receive
-              if self.args.smtp:
-                 self.smtp_machine =  self.args.smtp
-              if self.args.user:   
+                if self.args.sender:
+                   self.sendder = self.args.sender
+                else:
+                    print("usage: terminalmail.py [-h] -S SENDER [-R RECEIVE] [-M SMTP] [-U USER] [-A AUTHENTICATION]"
+                        +"[-a ATTACH] [-p POST] [-C CONFIG] [--html] [-F FORMAT]"+'\n'+
+                        "terminalmail.py: error: the following arguments are required: -S/--sender")
+                    exit()
+                if self.args.receive:   
+                   self.Receive = self.args.receive
+                else:
+                    print("usage: terminalmail.py [-h] -S SENDER [-R RECEIVE] [-M SMTP] [-U USER] [-A AUTHENTICATION]"
+                         +"[-a ATTACH] [-p POST] [-C CONFIG] [--html] [-F FORMAT]"+'\n'+
+                        "terminalmail.py: error: the following arguments are required: -R/--receive")
+                    exit()
+                if self.args.smtp:
+                   self.smtp_machine =  self.args.smtp
+                else:
+                    print("usage: terminalmail.py [-h] -S SENDER [-R RECEIVE] [-M SMTP] [-U USER] [-A AUTHENTICATION]"
+                        +"[-a ATTACH] [-p POST] [-C CONFIG] [--html] [-F FORMAT]"+'\n'+
+                        "terminalmail.py: error: the following arguments are required: -M/--smtp")
+                    exit()
+                if self.args.user:   
                  self.user_SMTP = self.args.user
-              if self.args.authentication :
-                 self.auth = self.args.authentication
-              if self.args.attach:
-                 self.attach = self.args.attach   
-              self.subject   = str(input("📧️ Enter Email Subject : "))
-              if self.args.post:
+                else:   
+                    print("usage: terminalmail.py [-h] -S SENDER [-R RECEIVE] [-M SMTP] [-U USER] [-A AUTHENTICATION]"
+                        +"[-a ATTACH] [-p POST] [-C CONFIG] [--html] [-F FORMAT]"+'\n'+
+                        "terminalmail.py: error: the following arguments are required: -U/--user")
+                    exit()
+                if self.args.authentication :
+                   self.auth = self.args.authentication
+                else:
+                    print("usage: terminalmail.py [-h] -S SENDER [-R RECEIVE] [-M SMTP] [-U USER] [-A AUTHENTICATION]"
+                        +"[-a ATTACH] [-p POST] [-C CONFIG] [--html] [-F FORMAT]"+'\n'+
+                        "terminalmail.py: error: the following arguments are required: -A/--authentication")
+                    exit()
+                if self.args.attach:
+                   self.attach = self.args.attach   
+                self.subject   = str(input("📧️ Enter Email Subject : "))
+                if self.args.post:
                    with open(self.args.post,'r') as postmes:
                        self.body = postmes.read()
                    self.path_Mes = os.path.abspath(self.args.post) 
-                   self.mes_name =  os.path.basename( self.path_Mes)       
-              else:         
-                  self.body      = str(input("📝️ Enter Email Message : "))     
-              print('='*30)               
+                   self.mes_name =  os.path.basename( self.path_Mes)     
+                elif self.args.html:
+                    pass     
+                else:         
+                    self.body      = str(input("📝️ Enter Email Message : "))     
+                print('='*30)               
         else:
              print(self.banner)          
              parser.print_help()
              exit()
-             
+
       def print_info(self):   
-          time.sleep(0.45)
-          print()     
-          print('🪧️ From                    : '              ,self.sendder)
-          time.sleep(0.45)
-          print('🪪️ To                      : '              ,self.Receive )
-          time.sleep(0.45)
-          print('🖥️  SMTP Mail Server        : '  ,self.smtp_machine  )
-          time.sleep(0.45)
-          print('👤️ SMTP Mail User          : '  ,self.user_SMTP )
-          time.sleep(0.45)
-          print('🔏️ SMTP authentication     : ',self.auth)
-          time.sleep(0.45)
-          print('📰️ Subject                 : '           ,self.subject  )
-          time.sleep(0.45)
-          if self.args.post:
-               print('🧾️ Message File            : '           ,self.mes_name )
+            time.sleep(0.45)
+            print()     
+            print('🪧️ From                    : ',self.sendder.strip())
+            time.sleep(0.45)
+            print('🪪️ To                      : ',self.Receive.strip())
+            time.sleep(0.45)
+            print('🖥️  SMTP Mail Server        : ',self.smtp_machine.strip())
+            time.sleep(0.45)
+            print('👤️ SMTP Mail User          : ',self.user_SMTP.strip() )
+            time.sleep(0.45)
+            print('🔏️ SMTP authentication     : ',self.auth.strip())
+            time.sleep(0.45)
+            print('📰️ Subject                 : ',self.subject.strip())
+            time.sleep(0.45)
+            if self.args.post:
+               print('🧾️ Message File       : ',self.mes_name.strip())
                time.sleep(0.45)  
-          else:       
-              print('🧾️ Message                 : '           ,self.body )
-              time.sleep(0.45)         
+            elif self.args.html:
+                 print('💼️ Email Type              :  HTML Format')  
+            else:       
+                 print('🧾️ Message              : ',self.body.strip())
+                 time.sleep(0.45)         
       def main(self):
           self.print_info()
           self.Messags_heder()
