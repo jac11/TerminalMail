@@ -188,12 +188,12 @@ class Send_Mail():
                       self.auth          = str(Config[4]).replace('\n','').strip()
                       self.subject       = str(input("📧️ Enter Email Subject : "))
                       if self.args.attach:
-                          self.attach = self.args.attach    
-                      if self.args.post:
+                          self.attach = self.args.attach   
+                      if self.args.post :
                           with open(self.args.post,'r') as postmes:
                               self.body = postmes.read()
                               self.path_Mes = os.path.abspath(self.args.post) 
-                              self.mes_name =  os.path.basename( self.path_Mes)       
+                              self.mes_name =  os.path.basename( self.path_Mes)      
                       else:         
                           self.body = str(input("📝️ Enter Email Message : "))  
                       print('='*30)       
@@ -234,9 +234,9 @@ class Send_Mail():
                             "terminalmail.py: error: the following arguments are required: -A/--authentication")
                         exit()
                     if self.args.attach:
-                       self.attach = self.args.attach   
+                       self.attach = self.args.attach 
                     self.subject   = str(input("📧️ Enter Email Subject : "))
-                    if self.args.post:
+                    if self.args.post :
                        with open(self.args.post,'r') as postmes:
                            self.body = postmes.read()
                        self.path_Mes = os.path.abspath(self.args.post) 
@@ -256,7 +256,6 @@ class Send_Mail():
         except KeyboardInterrupt:
                   print(self.banner)
                   exit()      
-
       def print_info(self):  
             try: 
                 time.sleep(0.45)
@@ -274,8 +273,8 @@ class Send_Mail():
                 print('📰️ Subject                 : ',self.subject.strip())
                 time.sleep(0.45)
                 if self.args.post:
-                   print('🧾️ Message File       : ',self.mes_name.strip())
-                   time.sleep(0.45)  
+                     print('🧾️ Message File            : ',self.mes_name.strip())
+                     time.sleep(0.45)  
                 elif self.args.html:
                      print('🧾️ Message                 : ',self.body.strip())
                      print('💼️ Email Type              :  HTML Format')  
