@@ -19,15 +19,15 @@ class Send_Mail():
          
       def __init__(self): 
 
-            self.banner =R+"""     
+            self.banner =R+"""   
   ______                                 _ ,__ __          _  
  (_) |                   o              | /|  |  |      o | | 
      |_   ,_    _  _  _      _  _   __, | ||  |  |  __,   | | 
    _ |/  /  |  / |/ |/ | |  / |/ | /  | |/ |  |  | /  | | |/  
-  (_/|__/   |_/  |  |  |_|_/  |  |_\_/|_|__|  |  |_\_/|_|_|__/
-                          \____/               by:jacstory     
+  (_/|__/   |_/  |  |  |_|_/  |  |_\\_/|_|__|  |  |_\\_/|_|_|__/
+                          \\____/               by:jacstory     
                                                            """+W
-            print(self.banner)
+            #print(self.banner)
             self.control()
             self.main() 
                 
